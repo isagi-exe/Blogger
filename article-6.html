@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to AWS VPC | RMLOOP Blog</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Space Grotesk & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        #reading-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #f59e0b, #f97316);
+            width: 0%;
+            z-index: 100;
+            transition: width 0.1s ease-out;
+        }
+        .article-content h2 { font-size: 1.875rem; font-weight: 800; margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; color: #111827; }
+        .article-content h3 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; color: #1f2937; }
+        .article-content p, .article-content li { line-height: 1.8; font-size: 1.125rem; color: #374151; }
+        .article-content p { margin-bottom: 1.5rem; }
+        .article-content ul { list-style-type: none; padding-left: 0; margin-bottom: 1.5rem; }
+        .article-content li { margin-bottom: 0.75rem; position: relative; padding-left: 1.75rem; }
+        .article-content li::before { content: ''; position: absolute; left: 0; top: 0.6rem; width: 0.5rem; height: 0.5rem; background-color: #f59e0b; border-radius: 50%; transition: transform 0.2s ease-in-out; }
+        .article-content li:hover::before { transform: scale(1.5); }
+        .hero-bg-pattern { background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div id="reading-progress-bar"></div>
+
+    <!-- ========= Header Navigation Start ========= -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-40 shadow-sm transition-all duration-300 border-b border-gray-200/80">
+        <div class="container mx-auto px-6 py-4 relative">
+            <div class="flex items-center justify-between">
+                <div class="text-2xl font-extrabold text-gray-900 tracking-wide"><a href="index.html" class="flex items-center group"><span class="border-r-4 border-blue-500 pr-2 mr-2 group-hover:border-indigo-500 transition-colors"></span>RMLOOP</a></div>
+                <nav class="hidden md:flex items-center space-x-8 font-medium">
+                    <a href="index.html#home" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">HOME</a>
+                    <a href="index.html#services" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">SERVICES</a>
+                    <a href="index.html#posts" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">POSTS</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">CONNECT</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- ========= Header Navigation End ========= -->
+
+    <main>
+        <!-- Article Header -->
+        <div class="relative py-24 bg-gradient-to-r from-amber-500 to-orange-600 hero-bg-pattern">
+            <div class="container mx-auto px-6 text-center text-white">
+                <span class="text-sm font-semibold uppercase text-amber-200 bg-amber-800/50 px-3 py-1 rounded-full mb-4 inline-block">Cloud</span>
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Introduction to AWS VPC</h1>
+                <p class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto">Your private corner of the AWS cloud. A beginner's guide to Virtual Private Clouds and their core components.</p>
+                <div class="mt-6 text-sm text-gray-300 flex items-center justify-center gap-4">
+                    <span><i data-lucide="user" class="inline-block w-4 h-4 mr-1"></i>By Zakaria Rami</span>
+                    <span><i data-lucide="calendar" class="inline-block w-4 h-4 mr-1"></i>July 24, 2025</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Article Content -->
+        <article id="article-body" class="bg-white max-w-4xl mx-auto p-6 md:p-12 -mt-16 relative rounded-lg shadow-2xl">
+            <div class="article-content text-gray-700">
+                
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-12">
+                    <h3 class="text-xl font-bold text-gray-900 mt-0 mb-4 flex items-center"><i data-lucide="key" class="w-6 h-6 mr-2 text-amber-600"></i>Key Takeaways</h3>
+                    <ul class="text-base">
+                        <li>An AWS Virtual Private Cloud (VPC) is your personal, isolated section of the AWS cloud.</li>
+                        <li>It provides foundational security by letting you control who can access your resources.</li>
+                        <li>Core components include Subnets, Route Tables, and Internet Gateways.</li>
+                        <li>Proper VPC design is the most important first step for building any secure and scalable application on AWS.</li>
+                    </ul>
+                </div>
+
+                <h2>Why Do You Need a VPC?</h2>
+                <p>When you use a public cloud provider like Amazon Web Services (AWS), you're sharing a massive global infrastructure with thousands of other customers. An AWS Virtual Private Cloud (VPC) is what allows you to carve out your own logically isolated, private section of that cloud. It's the networking foundation for all of your AWS resources, like EC2 instances (virtual servers) and RDS databases.</p>
+                <p>Without a VPC, your resources would be exposed directly to the public internet, creating a massive security risk. A VPC gives you complete control over your virtual networking environment, including your own IP address range, subnets, route tables, and network gateways.</p>
+                
+                <h2>Core Components of a VPC</h2>
+                <p>Understanding these three components is key to understanding how a VPC works.</p>
+                <ul>
+                    <li><strong>Subnets:</strong> A subnet is a range of IP addresses within your VPC. You divide your VPC into one or more subnets to group resources. Subnets can be designated as either <strong>public</strong> (meaning resources within them can be directly accessible from the internet) or <strong>private</strong> (resources are not directly accessible from the internet).</li>
+                    <li><strong>Route Tables:</strong> A route table contains a set of rules, called routes, that determine where network traffic from your subnet is directed. For example, a route table for a public subnet will have a route that directs internet-bound traffic to an Internet Gateway.</li>
+                    <li><strong>Internet Gateway (IGW):</strong> This is a horizontally scaled, redundant, and highly available VPC component that allows communication between your VPC and the internet. It's the "door" to the outside world for your public resources.</li>
+                </ul>
+
+                <h2>A Common Architecture</h2>
+                <p>A typical, secure web application setup involves at least two subnets:</p>
+                <ol>
+                    <li>A <strong>public subnet</strong> containing your web servers (EC2 instances). These need to be accessible from the internet to serve your website to users. Its route table points to the Internet Gateway.</li>
+                    <li>A <strong>private subnet</strong> containing your database (e.g., an RDS instance). The database should never be exposed directly to the internet. It only needs to communicate with the web servers. Its route table does *not* have a route to the Internet Gateway.</li>
+                </ol>
+                <p>This simple separation dramatically improves your security posture by protecting your most sensitive data.</p>
+
+                <h2>Conclusion</h2>
+                <p>Mastering the AWS VPC is the first and most critical step toward building secure, scalable, and reliable applications in the cloud. By understanding how to control the flow of traffic with subnets, route tables, and gateways, you gain the power to design network architectures that meet the specific needs of your applications while keeping your resources safe.</p>
+                
+                <div class="mt-12 pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-bold text-center text-gray-800 mb-4">Share this Article</h3>
+                    <div class="flex justify-center items-center gap-4">
+                        <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors transform hover:scale-125 duration-200"><i data-lucide="twitter" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-800 transition-colors transform hover:scale-125 duration-200"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-red-600 transition-colors transform hover:scale-125 duration-200"><i data-lucide="mail" class="w-6 h-6"></i></a>
+                    </div>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <a href="index.html#posts" class="inline-block bg-gray-200 text-gray-800 font-bold px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                        &larr; Back to All Posts
+                    </a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- ========= Footer Start ========= -->
+    <footer class="bg-gray-800 text-gray-300 py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-3xl font-extrabold text-white tracking-tight">RMLOOP</h3>
+            <p class="mt-4 max-w-md mx-auto">Professional solutions in IT infrastructure, networking, and cybersecurity.</p>
+            <div class="flex justify-center items-center gap-6 mt-8">
+                <a href="https://github.com/isagi-exe" target="_blank" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="github" class="w-6 h-6"></i></a>
+                <a href="https://www.linkedin.com/in/rmloop/" target="_blank" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+            </div>
+            <div class="text-center text-gray-500 mt-12 border-t border-gray-700 pt-8"><p>&copy; 2025 Zakaria Rami. All Rights Reserved.</p></div>
+        </div>
+    </footer>
+    <!-- ========= Footer End ========= -->
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            
+            const progressBar = document.getElementById('reading-progress-bar');
+            window.addEventListener('scroll', () => {
+                const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrolled = (window.scrollY / scrollableHeight) * 100;
+                progressBar.style.width = `${scrolled}%`;
+            });
+        });
+    </script>
+</body>
+</html>

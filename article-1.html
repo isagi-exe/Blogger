@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réseau isolé avec WiFi RADIUS - UniFi | RMLOOP Blog</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        #reading-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #8b5cf6, #6366f1);
+            width: 0%;
+            z-index: 100;
+            transition: width 0.1s ease-out;
+        }
+        .article-content h2 { font-size: 1.875rem; font-weight: 800; margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; color: #111827; }
+        .article-content h3 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; color: #1f2937; }
+        .article-content p, .article-content li { line-height: 1.8; font-size: 1.125rem; color: #374151; }
+        .article-content p { margin-bottom: 1.5rem; }
+        .article-content ul, .article-content ol { list-style-type: none; padding-left: 0; margin-bottom: 1.5rem; }
+        .article-content li { margin-bottom: 0.75rem; position: relative; padding-left: 1.75rem; }
+        .article-content li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.6rem;
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: #8b5cf6;
+            border-radius: 50%;
+            transition: transform 0.2s ease-in-out;
+        }
+        .article-content li:hover::before { transform: scale(1.5); }
+        .article-content code { font-family: 'Courier New', Courier, monospace; font-size: 0.95em; }
+        .article-content pre {
+            background-color: #1f2937;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #374151;
+            color: #d1d5db;
+            padding: 0.5rem 1rem;
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+            font-size: 0.875rem;
+        }
+        .code-body {
+            padding: 1.5rem;
+            overflow-x: auto;
+            color: #d1d5db;
+        }
+        .copy-btn {
+            background-color: #4b5563;
+            color: #e5e7eb;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .copy-btn:hover { background-color: #6b7280; }
+        .hero-bg-pattern { background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div id="reading-progress-bar"></div>
+
+    <!-- ========= Header Navigation Start ========= -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-40 shadow-md transition-all duration-300 border-b border-gray-200/80">
+        <div class="container mx-auto px-6 py-4 relative">
+            <div class="flex items-center justify-between">
+                <div class="text-2xl font-extrabold text-gray-900 tracking-wide"><a href="index.html" class="flex items-center group"><span class="border-r-4 border-blue-600 pr-2 mr-2 group-hover:border-indigo-500 transition-colors"></span>RMLOOP</a></div>
+                <nav class="hidden md:flex items-center space-x-8 font-medium">
+                    <a href="index.html#home" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">HOME</a>
+                    <a href="index.html#services" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">SERVICES</a>
+                    <a href="index.html#posts" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">POSTS</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">CONTACT</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- ========= Header Navigation End ========= -->
+
+    <main>
+        <!-- Article Header -->
+        <div class="relative py-24 bg-gradient-to-r from-purple-500 to-indigo-600 hero-bg-pattern">
+            <div class="container mx-auto px-6 text-center text-white">
+                <span class="text-sm font-semibold uppercase text-purple-200 bg-purple-800/50 px-3 py-1 rounded-full mb-4 inline-block">Security</span>
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Réseau isolé avec WiFi RADIUS - UniFi</h1>
+                <p class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto">A comprehensive guide to implementing enterprise-grade security on your UniFi wireless network.</p>
+                <div class="mt-6 text-sm text-gray-300 flex items-center justify-center gap-4">
+                    <span><i data-lucide="user" class="inline-block w-4 h-4 mr-1"></i>By Zakaria Rami</span>
+                    <span><i data-lucide="calendar" class="inline-block w-4 h-4 mr-1"></i>July 23, 2025</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Article Content -->
+        <article id="article-body" class="bg-white max-w-4xl mx-auto p-6 md:p-12 -mt-16 relative rounded-lg shadow-2xl">
+            <div class="article-content text-gray-700">
+                
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-12">
+                    <h3 class="text-xl font-bold text-gray-900 mt-0 mb-4 flex items-center"><i data-lucide="key" class="w-6 h-6 mr-2 text-purple-600"></i>Key Takeaways</h3>
+                    <ul class="text-base">
+                        <li>RADIUS authentication (WPA2-Enterprise) provides superior security over shared passwords (PSK).</li>
+                        <li>Each user gets unique credentials, allowing for granular access control and easy revocation.</li>
+                        <li>UniFi hardware integrates seamlessly with standard RADIUS servers like FreeRADIUS.</li>
+                        <li>This setup is essential for any organization looking to secure its wireless infrastructure properly.</li>
+                    </ul>
+                </div>
+
+                <h2>Introduction</h2>
+                <p>La sécurisation d'un réseau WiFi est une priorité absolue pour toute organisation. L'utilisation d'un mot de passe partagé (PSK) est pratique mais présente des failles de sécurité importantes : si un appareil est compromis ou un employé quitte l'entreprise, le mot de passe doit être changé partout. Une solution beaucoup plus robuste est d'utiliser l'authentification 802.1X avec un serveur RADIUS (Remote Authentication Dial-In User Service). Ce guide vous montrera comment mettre en place un réseau WiFi isolé et sécurisé en utilisant un serveur RADIUS avec des équipements UniFi.</p>
+                
+                <h2>Prérequis</h2>
+                <p>Avant de commencer, assurez-vous de disposer des éléments suivants :</p>
+                <ul>
+                    <li>Un contrôleur UniFi (Cloud Key, UDM, ou auto-hébergé) avec des points d'accès UniFi adoptés.</li>
+                    <li>Un serveur capable d'exécuter un service RADIUS (par exemple, un serveur Windows avec le rôle NPS, ou un serveur Linux avec FreeRADIUS).</li>
+                    <li>Des connaissances de base en administration réseau et UniFi.</li>
+                </ul>
+
+                <h2>Étape 1: Configuration du Serveur RADIUS</h2>
+                <p>La première étape consiste à configurer votre serveur RADIUS. Pour cet exemple, nous utiliserons FreeRADIUS sur un serveur Ubuntu, une solution open-source populaire et puissante.</p>
+                <h3>Installation de FreeRADIUS</h3>
+                <p>Connectez-vous à votre serveur Ubuntu et installez le paquet FreeRADIUS :</p>
+                <pre><div class="code-header"><span>Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><code class="code-body">sudo apt update
+sudo apt install freeradius -y</code></pre>
+                
+                <h3>Configuration des Clients (Points d'Accès)</h3>
+                <p>Vous devez déclarer vos points d'accès UniFi comme des clients autorisés à communiquer avec le serveur RADIUS. Modifiez le fichier <code>/etc/freeradius/3.0/clients.conf</code> :</p>
+                <pre><div class="code-header"><span>clients.conf</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><code class="code-body">client unifi_aps {
+    ipaddr = 192.168.1.0/24   # Remplacez par le sous-réseau de vos APs
+    secret = your_very_secret_key # Choisissez un secret partagé fort
+}</code></pre>
+                <p>Le <code>secret</code> est une clé partagée qui sera utilisée par les points d'accès UniFi et le serveur RADIUS pour communiquer de manière sécurisée.</p>
+
+                <h3>Configuration des Utilisateurs</h3>
+                <p>Ensuite, définissez les utilisateurs qui pourront s'authentifier. Modifiez le fichier <code>/etc/freeradius/3.0/users</code> :</p>
+                <pre><div class="code-header"><span>users</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><code class="code-body">user1 Cleartext-Password := "PasswordForUser1"
+user2 Cleartext-Password := "PasswordForUser2"</code></pre>
+                <p>Pour une sécurité accrue en production, il est recommandé d'utiliser des méthodes d'authentification plus fortes comme EAP-TTLS ou PEAP avec des certificats.</p>
+
+                <h2>Étape 2: Configuration dans le Contrôleur UniFi</h2>
+                <p>Maintenant que le serveur RADIUS est prêt, configurez le contrôleur UniFi pour l'utiliser. Cette étape relie votre infrastructure sans fil au serveur d'authentification que vous venez de mettre en place.</p>
+                
+                <h2>Conclusion</h2>
+                <p>Vous avez maintenant mis en place un réseau WiFi d'entreprise sécurisé avec une authentification par utilisateur via RADIUS. Cette configuration améliore considérablement la sécurité en remplaçant les clés pré-partagées par des identifiants uniques, vous permettant de gérer l'accès de manière granulaire et de révoquer facilement les accès si nécessaire. C'est une étape fondamentale vers une infrastructure réseau plus mature et sécurisée.</p>
+                
+                <!-- Share Section -->
+                <div class="mt-12 pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-bold text-center text-gray-800 mb-4">Share this Article</h3>
+                    <div class="flex justify-center items-center gap-4">
+                        <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors transform hover:scale-125 duration-200"><i data-lucide="twitter" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-800 transition-colors transform hover:scale-125 duration-200"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-red-600 transition-colors transform hover:scale-125 duration-200"><i data-lucide="mail" class="w-6 h-6"></i></a>
+                    </div>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <a href="index.html#posts" class="inline-block bg-gray-200 text-gray-800 font-bold px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                        &larr; Back to All Posts
+                    </a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- ========= Footer Start ========= -->
+    <footer class="bg-gray-800 text-gray-300 py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-3xl font-extrabold text-white tracking-tight">RMLOOP</h3>
+            <p class="mt-4 max-w-md mx-auto">Professional solutions in IT infrastructure, networking, and cybersecurity.</p>
+            <div class="flex justify-center items-center gap-6 mt-8">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="twitter" class="w-6 h-6"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="github" class="w-6 h-6"></i></a>
+            </div>
+            <div class="text-center text-gray-500 mt-12 border-t border-gray-700 pt-8">
+                <p>&copy; 2024 Your Name. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- ========= Footer End ========= -->
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            
+            // Reading Progress Bar
+            const progressBar = document.getElementById('reading-progress-bar');
+            const articleBody = document.getElementById('article-body');
+            window.addEventListener('scroll', () => {
+                const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrolled = (window.scrollY / scrollableHeight) * 100;
+                progressBar.style.width = `${scrolled}%`;
+            });
+
+            // Copy Code Functionality
+            window.copyCode = (button) => {
+                const pre = button.closest('pre');
+                const code = pre.querySelector('code.code-body');
+                const textToCopy = code.innerText;
+                
+                // Use a temporary textarea to copy
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    button.innerText = 'Copied!';
+                    setTimeout(() => {
+                        button.innerText = 'Copy';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                }
+                document.body.removeChild(textArea);
+            };
+        });
+    </script>
+</body>
+</html>

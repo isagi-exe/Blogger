@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basics of Networking | RMLOOP Blog</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        #reading-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #4f46e5, #3b82f6);
+            width: 0%;
+            z-index: 100;
+            transition: width 0.1s ease-out;
+        }
+        .article-content h2 { font-size: 1.875rem; font-weight: 800; margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; color: #111827; }
+        .article-content h3 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; color: #1f2937; }
+        .article-content p, .article-content li { line-height: 1.8; font-size: 1.125rem; color: #374151; }
+        .article-content p { margin-bottom: 1.5rem; }
+        .article-content ul { list-style-type: none; padding-left: 0; margin-bottom: 1.5rem; }
+        .article-content li { margin-bottom: 0.75rem; position: relative; padding-left: 1.75rem; }
+        .article-content li::before { content: ''; position: absolute; left: 0; top: 0.6rem; width: 0.5rem; height: 0.5rem; background-color: #4f46e5; border-radius: 50%; transition: transform 0.2s ease-in-out; }
+        .article-content li:hover::before { transform: scale(1.5); }
+        .article-content code { background-color: #1f2937; color: #93c5fd; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; }
+        .article-content blockquote { border-left: 4px solid #4f46e5; padding: 1rem 1.5rem; margin: 2rem 0; background-color: #eef2ff; color: #312e81; font-style: italic; font-weight: 500; border-radius: 0 0.5rem 0.5rem 0; }
+        .hero-bg-pattern { background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div id="reading-progress-bar"></div>
+
+    <!-- ========= Header Navigation Start ========= -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-40 shadow-md transition-all duration-300 border-b border-gray-200/80">
+        <div class="container mx-auto px-6 py-4 relative">
+            <div class="flex items-center justify-between">
+                <div class="text-2xl font-extrabold text-gray-900 tracking-wide"><a href="index.html" class="flex items-center group"><span class="border-r-4 border-blue-600 pr-2 mr-2 group-hover:border-indigo-500 transition-colors"></span>RMLOOP</a></div>
+                <nav class="hidden md:flex items-center space-x-8 font-medium">
+                    <a href="index.html#home" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">HOME</a>
+                    <a href="index.html#services" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">SERVICES</a>
+                    <a href="index.html#posts" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">POSTS</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">CONTACT</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- ========= Header Navigation End ========= -->
+
+    <main>
+        <!-- Article Header -->
+        <div class="relative py-24 bg-gradient-to-r from-blue-500 to-indigo-600 hero-bg-pattern">
+            <div class="container mx-auto px-6 text-center text-white">
+                <span class="text-sm font-semibold uppercase text-blue-200 bg-blue-800/50 px-3 py-1 rounded-full mb-4 inline-block">Fundamentals</span>
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Basics of Networking</h1>
+                <p class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto">Building a solid foundation by understanding the core concepts that power the internet and all connected devices.</p>
+                <div class="mt-6 text-sm text-gray-300 flex items-center justify-center gap-4">
+                    <span><i data-lucide="user" class="inline-block w-4 h-4 mr-1"></i>By Zakaria Rami</span>
+                    <span><i data-lucide="calendar" class="inline-block w-4 h-4 mr-1"></i>July 23, 2025</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Article Content -->
+        <article id="article-body" class="bg-white max-w-4xl mx-auto p-6 md:p-12 -mt-16 relative rounded-lg shadow-2xl">
+            <div class="article-content text-gray-700">
+                <h2>What is a Network?</h2>
+                <p>At its core, a computer network is a group of two or more interconnected computing devices that can exchange data and share resources. These devices can be anything from servers, desktops, and laptops to smartphones and IoT devices. The connections between them can be wired (using Ethernet cables) or wireless (using Wi-Fi). The internet itself is the largest example of a network—a global network of networks.</p>
+                
+                <h2>The OSI Model: A Conceptual Framework</h2>
+                <p>To understand how networks function, it's helpful to know about the OSI (Open Systems Interconnection) model. It's a conceptual framework that standardizes the functions of a telecommunication or computing system into seven abstract layers. Each layer serves a specific purpose and communicates with the layers directly above and below it.</p>
+                <ul>
+                    <li><strong>Layer 7 (Application):</strong> Where network applications like web browsers and email clients operate.</li>
+                    <li><strong>Layer 4 (Transport):</strong> Provides reliable data transfer with protocols like TCP and UDP.</li>
+                    <li><strong>Layer 3 (Network):</strong> Handles logical addressing and routing (e.g., IP addresses).</li>
+                    <li><strong>Layer 2 (Data Link):</strong> Manages physical addressing (e.g., MAC addresses).</li>
+                    <li><strong>Layer 1 (Physical):</strong> The actual hardware—cables, switches, and wireless signals.</li>
+                </ul>
+
+                <h2>Key Components of a Network</h2>
+                <h3>IP Addresses & Subnetting</h3>
+                <p>An IP (Internet Protocol) address is a unique numerical label assigned to each device on a network. It's like a street address for your computer. For example, <code>192.168.1.10</code> is a common private IP address. Networks are often divided into smaller sub-networks, or "subnets," to improve organization and performance.</p>
+                
+                <h3>Routers and Switches</h3>
+                <p>These are the traffic cops of a network.</p>
+                <blockquote>
+                    A <strong>switch</strong> operates at Layer 2 and connects devices within the same local network (LAN). It uses MAC addresses to forward data to the correct device.<br/>
+                    A <strong>router</strong> operates at Layer 3 and connects different networks together. It uses IP addresses to route traffic between networks, including from your local network to the internet.
+                </blockquote>
+
+                <h3>DNS: The Internet's Phonebook</h3>
+                <p>When you type <code>www.google.com</code> into your browser, your computer doesn't magically know where to find it. It uses the Domain Name System (DNS) to look up the IP address associated with that domain name. DNS servers translate human-readable names into machine-readable IP addresses, making the internet navigable.</p>
+
+                <h2>Conclusion</h2>
+                <p>This is just a brief overview, but understanding these fundamental concepts—the OSI model, IP addressing, and the roles of key hardware—is the first step to mastering the world of networking. Each of these topics can be explored in much greater depth, forming the foundation for more advanced subjects like network security, cloud computing, and wireless technologies.</p>
+                
+                <div class="mt-12 pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-bold text-center text-gray-800 mb-4">Share this Article</h3>
+                    <div class="flex justify-center items-center gap-4">
+                        <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors transform hover:scale-125 duration-200"><i data-lucide="twitter" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-800 transition-colors transform hover:scale-125 duration-200"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-red-600 transition-colors transform hover:scale-125 duration-200"><i data-lucide="mail" class="w-6 h-6"></i></a>
+                    </div>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <a href="index.html#posts" class="inline-block bg-gray-200 text-gray-800 font-bold px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                        &larr; Back to All Posts
+                    </a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- ========= Footer Start ========= -->
+    <footer class="bg-gray-800 text-gray-300 py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-3xl font-extrabold text-white tracking-tight">RMLOOP</h3>
+            <p class="mt-4 max-w-md mx-auto">Professional solutions in IT infrastructure, networking, and cybersecurity.</p>
+            <div class="flex justify-center items-center gap-6 mt-8">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="twitter" class="w-6 h-6"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="github" class="w-6 h-6"></i></a>
+            </div>
+            <div class="text-center text-gray-500 mt-12 border-t border-gray-700 pt-8">
+                <p>&copy; 2024 Your Name. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- ========= Footer End ========= -->
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            
+            const progressBar = document.getElementById('reading-progress-bar');
+            const articleBody = document.getElementById('article-body');
+            window.addEventListener('scroll', () => {
+                const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrolled = (window.scrollY / scrollableHeight) * 100;
+                progressBar.style.width = `${scrolled}%`;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segmenting Networks with VLANs | RMLOOP Blog</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Space Grotesk & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        #reading-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            width: 0%;
+            z-index: 100;
+            transition: width 0.1s ease-out;
+        }
+        .article-content h2 { font-size: 1.875rem; font-weight: 800; margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; color: #111827; }
+        .article-content h3 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; color: #1f2937; }
+        .article-content p, .article-content li { line-height: 1.8; font-size: 1.125rem; color: #374151; }
+        .article-content p { margin-bottom: 1.5rem; }
+        .article-content ul { list-style-type: none; padding-left: 0; margin-bottom: 1.5rem; }
+        .article-content li { margin-bottom: 0.75rem; position: relative; padding-left: 1.75rem; }
+        .article-content li::before { content: ''; position: absolute; left: 0; top: 0.6rem; width: 0.5rem; height: 0.5rem; background-color: #10b981; border-radius: 50%; transition: transform 0.2s ease-in-out; }
+        .article-content li:hover::before { transform: scale(1.5); }
+        .hero-bg-pattern { background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div id="reading-progress-bar"></div>
+
+    <!-- ========= Header Navigation Start ========= -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-40 shadow-md transition-all duration-300 border-b border-gray-200/80">
+        <div class="container mx-auto px-6 py-4 relative">
+            <div class="flex items-center justify-between">
+                <div class="text-2xl font-extrabold text-gray-900 tracking-wide"><a href="index.html" class="flex items-center group"><span class="border-r-4 border-blue-500 pr-2 mr-2 group-hover:border-indigo-500 transition-colors"></span>RMLOOP</a></div>
+                <nav class="hidden md:flex items-center space-x-8 font-medium">
+                    <a href="index.html#home" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">HOME</a>
+                    <a href="index.html#services" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">SERVICES</a>
+                    <a href="index.html#posts" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">POSTS</a>
+                    <a href="index.html#contact" class="text-gray-600 hover:text-gray-900 transition-colors duration-300">CONNECT</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- ========= Header Navigation End ========= -->
+
+    <main>
+        <!-- Article Header -->
+        <div class="relative py-24 bg-gradient-to-r from-emerald-500 to-green-600 hero-bg-pattern">
+            <div class="container mx-auto px-6 text-center text-white">
+                <span class="text-sm font-semibold uppercase text-emerald-200 bg-emerald-800/50 px-3 py-1 rounded-full mb-4 inline-block">Networking</span>
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Segmenting Networks with VLANs</h1>
+                <p class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto">Discover how Virtual LANs can dramatically improve your network's security and performance by logically isolating traffic.</p>
+                <div class="mt-6 text-sm text-gray-300 flex items-center justify-center gap-4">
+                    <span><i data-lucide="user" class="inline-block w-4 h-4 mr-1"></i>By Zakaria Rami</span>
+                    <span><i data-lucide="calendar" class="inline-block w-4 h-4 mr-1"></i>July 24, 2025</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Article Content -->
+        <article id="article-body" class="bg-white max-w-4xl mx-auto p-6 md:p-12 -mt-16 relative rounded-lg shadow-2xl">
+            <div class="article-content text-gray-700">
+                
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-12">
+                    <h3 class="text-xl font-bold text-gray-900 mt-0 mb-4 flex items-center"><i data-lucide="key" class="w-6 h-6 mr-2 text-emerald-600"></i>Key Takeaways</h3>
+                    <ul class="text-base">
+                        <li>VLANs (Virtual LANs) logically segment a physical network into multiple, isolated broadcast domains.</li>
+                        <li>They enhance security by preventing devices in one VLAN from communicating with another unless explicitly allowed by a router.</li>
+                        <li>VLANs improve performance by containing broadcast traffic within a single VLAN, reducing unnecessary network chatter.</li>
+                        <li>The IEEE 802.1Q standard is the protocol used to tag traffic with VLAN information across switches.</li>
+                    </ul>
+                </div>
+
+                <h2>The Problem with Flat Networks</h2>
+                <p>Imagine a small office with all devices connected to a single switch. This is known as a "flat network." While simple, this design has major drawbacks as the network grows. Every broadcast message (like a DHCP request) is sent to every single device, creating unnecessary traffic and slowing down the network. More importantly, every device can, by default, see every other device, posing a significant security risk. A compromised guest device could potentially access sensitive company servers.</p>
+                
+                <h2>What is a VLAN?</h2>
+                <p>A Virtual Local Area Network (VLAN) is the solution. A VLAN allows you to group devices together into a logical network, regardless of their physical location. Devices within a VLAN can communicate with each other as if they were on their own private switch, but they are isolated from devices in other VLANs.</p>
+                <p>For example, you could create:</p>
+                <ul>
+                    <li><strong>VLAN 10:</strong> For the Engineering department.</li>
+                    <li><strong>VLAN 20:</strong> For the Sales department.</li>
+                    <li><strong>VLAN 30:</strong> For guest wireless access.</li>
+                </ul>
+                <p>Even if an engineer and a salesperson are plugged into the same physical switch, their devices would be in separate, isolated networks.</p>
+
+                <h2>How VLANs Work: The 802.1Q Tag</h2>
+                <p>For VLANs to work across multiple switches, the switches need a way to identify which VLAN a piece of traffic belongs to. This is accomplished using the <strong>IEEE 802.1Q</strong> standard. When a data frame leaves a switch port that is part of a VLAN, the switch inserts a small "tag" into the frame's header. This tag contains the VLAN ID (e.g., 10, 20, or 30).</p>
+                <p>When the next switch receives the frame, it reads the tag and knows which VLAN the traffic belongs to, ensuring it only forwards the frame to other ports in that same VLAN.</p>
+
+                <h2>Conclusion</h2>
+                <p>VLANs are a fundamental technology for any modern network administrator. They provide a powerful and flexible way to segment your network, dramatically improving both security and performance. By logically grouping users and devices, you can create a more organized, efficient, and resilient network infrastructure.</p>
+                
+                <div class="mt-12 pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-bold text-center text-gray-800 mb-4">Share this Article</h3>
+                    <div class="flex justify-center items-center gap-4">
+                        <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors transform hover:scale-125 duration-200"><i data-lucide="twitter" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-800 transition-colors transform hover:scale-125 duration-200"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-red-600 transition-colors transform hover:scale-125 duration-200"><i data-lucide="mail" class="w-6 h-6"></i></a>
+                    </div>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <a href="index.html#posts" class="inline-block bg-gray-200 text-gray-800 font-bold px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                        &larr; Back to All Posts
+                    </a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- ========= Footer Start ========= -->
+    <footer class="bg-gray-800 text-gray-300 py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-3xl font-extrabold text-white tracking-tight">RMLOOP</h3>
+            <p class="mt-4 max-w-md mx-auto">Professional solutions in IT infrastructure, networking, and cybersecurity.</p>
+            <div class="flex justify-center items-center gap-6 mt-8">
+                <a href="https://github.com/isagi-exe" target="_blank" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="github" class="w-6 h-6"></i></a>
+                <a href="https://www.linkedin.com/in/rmloop/" target="_blank" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+            </div>
+            <div class="text-center text-gray-500 mt-12 border-t border-gray-700 pt-8"><p>&copy; 2025 Zakaria Rami. All Rights Reserved.</p></div>
+        </div>
+    </footer>
+    <!-- ========= Footer End ========= -->
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            
+            const progressBar = document.getElementById('reading-progress-bar');
+            window.addEventListener('scroll', () => {
+                const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrolled = (window.scrollY / scrollableHeight) * 100;
+                progressBar.style.width = `${scrolled}%`;
+            });
+        });
+    </script>
+</body>
+</html>

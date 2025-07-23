@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Iconic IT & Networking Blog</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Space Grotesk & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Three.js for 3D Animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f8f9fa; /* A clean, light background */
+            color: #212529;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Hero Section & Canvas */
+        #hero-section {
+            position: relative;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+        #wave-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Scroll-triggered Animations */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Active Nav Link Style */
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3b82f6;
+            transition: width 0.3s ease-in-out;
+        }
+        .nav-link:hover::after, .nav-active::after { width: 100%; }
+        .nav-active { color: #2563eb !important; font-weight: 700; }
+        
+        /* Card with Animated Border */
+        .service-card {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0, 0, 0, 0.06), transparent 40%);
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .service-card:hover::before { opacity: 1; }
+        .service-card > * { position: relative; z-index: 1; }
+
+        /* Infinite Scroll Marquee for Logos */
+        .marquee {
+            display: flex;
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+            mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+        }
+        .marquee-content {
+            display: flex;
+            animation: scroll 30s linear infinite;
+        }
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* 3D Tilt Effect for Blog Cards */
+        .card-3d {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .card-3d:hover {
+            transform: perspective(1000px) rotateX(5deg) rotateY(-5deg) scale(1.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- ========= Header Navigation Start ========= -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-40 shadow-sm transition-all duration-300 border-b border-gray-200/80">
+        <div class="container mx-auto px-6 py-4 relative">
+            <div class="flex items-center justify-between">
+                <div class="text-2xl font-extrabold text-gray-900 tracking-wide">
+                    <a href="#" class="flex items-center group"><span class="border-r-4 border-blue-500 pr-2 mr-2 group-hover:border-indigo-500 transition-colors"></span>RMLOOP</a>
+                </div>
+                <nav id="desktop-nav" class="hidden md:flex items-center space-x-8 font-medium">
+                    <a href="#home" class="nav-link text-gray-600 hover:text-gray-900 transition-colors duration-300">HOME</a>
+                    <a href="#services" class="nav-link text-gray-600 hover:text-gray-900 transition-colors duration-300">SERVICES</a>
+                    <a href="#posts" class="nav-link text-gray-600 hover:text-gray-900 transition-colors duration-300">POSTS</a>
+                    <a href="#contact" class="nav-link text-gray-600 hover:text-gray-900 transition-colors duration-300">CONNECT</a>
+                </nav>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-800 focus:outline-none"><span class="sr-only">Open main menu</span><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg></button>
+                </div>
+            </div>
+            <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white shadow-xl rounded-b-lg overflow-hidden">
+                <a href="#home" class="nav-link block px-6 py-4 text-gray-700 hover:bg-gray-100 hover:text-blue-600 font-medium transition-colors duration-200">HOME</a>
+                <a href="#services" class="nav-link block px-6 py-4 text-gray-700 hover:bg-gray-100 hover:text-blue-600 font-medium transition-colors duration-200 border-t border-gray-200">SERVICES</a>
+                <a href="#posts" class="nav-link block px-6 py-4 text-gray-700 hover:bg-gray-100 hover:text-blue-600 font-medium transition-colors duration-200 border-t border-gray-200">POSTS</a>
+                <a href="#contact" class="nav-link block px-6 py-4 text-gray-700 hover:bg-gray-100 hover:text-blue-600 font-medium transition-colors duration-200 border-t border-gray-200">CONNECT</a>
+            </div>
+        </div>
+    </header>
+    <!-- ========= Header Navigation End ========= -->
+
+    <main>
+        <!-- ========= Hero Section Start ========= -->
+        <section id="home" class="relative py-20 md:py-32 text-gray-900">
+            <canvas id="wave-canvas"></canvas>
+            <div class="container mx-auto px-6 relative z-10 reveal-on-scroll">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="text-center md:text-left">
+                        <h1 id="hero-headline" class="text-5xl md:text-6xl font-extrabold leading-tight mb-4 tracking-tight"></h1>
+                        <p class="text-gray-600 text-xl mb-8 leading-relaxed">Specializing in robust network infrastructures, advanced systems configuration, and innovative cybersecurity solutions.</p>
+                        <a href="#posts" class="inline-block bg-blue-600 text-white font-bold px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 duration-300">Explore My Work</a>
+                    </div>
+                    <div class="flex justify-center">
+                        <img src="https://i.postimg.cc/66kFgnNn/1730246855556-2.jpg" alt="Portrait of the blog author" class="rounded-full border-8 border-white/30 shadow-2xl w-80 h-80 md:w-96 md:h-96 object-cover transform hover:scale-105 transition-transform duration-500">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ========= Hero Section End ========= -->
+
+        <!-- ========= Services Section Start ========= -->
+        <section id="services" class="py-20 bg-gray-100 reveal-on-scroll">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-extrabold tracking-tight text-gray-900">What I Offer</h2>
+                    <p class="text-gray-600 mt-3 text-lg">A range of professional IT and networking services.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="service-card p-8 rounded-xl transition-all duration-300"><div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 text-blue-600 mb-6"><i data-lucide="shield-check"></i></div><h3 class="text-2xl font-bold mb-3 text-gray-900">Cybersecurity</h3><p class="text-gray-600">Protecting your digital assets with robust security protocols, threat analysis, and vulnerability assessments.</p></div>
+                    <div class="service-card p-8 rounded-xl transition-all duration-300"><div class="flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mb-6"><i data-lucide="network"></i></div><h3 class="text-2xl font-bold mb-3 text-gray-900">Network Architecture</h3><p class="text-gray-600">Designing and implementing scalable, high-performance network infrastructures tailored to your business needs.</p></div>
+                    <div class="service-card p-8 rounded-xl transition-all duration-300"><div class="flex items-center justify-center h-16 w-16 rounded-full bg-green-100 text-green-600 mb-6"><i data-lucide="cloud-cog"></i></div><h3 class="text-2xl font-bold mb-3 text-gray-900">Cloud Solutions</h3><p class="text-gray-600">Leveraging cloud platforms like AWS for scalable, secure, and cost-effective IT solutions and migrations.</p></div>
+                </div>
+            </div>
+        </section>
+        <!-- ========= Services Section End ========= -->
+        
+        <!-- ========= Featured Tech Start ========= -->
+        <section class="py-20 bg-white reveal-on-scroll">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                     <h2 class="text-3xl font-bold tracking-tight text-gray-900">Core Technologies</h2>
+                </div>
+                <div class="marquee">
+                    <div class="marquee-content">
+                        <img src="https://i.postimg.cc/7L7G4bP5/cisco-icon.png" alt="Cisco" class="h-12 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300">
+                        <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/aws.svg" alt="AWS" class="h-12 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300">
+                        <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/vmware.svg" alt="VMware" class="h-12 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300">
+                        <img src="https://i.postimg.cc/7LfvJTJL/openvpn-seeklogo.png" alt="OpenVPN" class="h-12 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300">
+                        <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/linux-tux.svg" alt="Linux" class="h-12 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300">
+                        <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/docker-icon.svg" alt="Docker" class="h-12 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300">
+                        <!-- Duplicate for infinite scroll -->
+                        <img src="https://i.postimg.cc/7L7G4bP5/cisco-icon.png" alt="Cisco" class="h-12 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300">
+                        <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/aws.svg" alt="AWS" class="h-12 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300">
+                        <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/vmware.svg" alt="VMware" class="h-12 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300">
+                        <img src="https://i.postimg.cc/7LfvJTJL/openvpn-seeklogo.png" alt="OpenVPN" class="h-12 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300">
+                        <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/linux-tux.svg" alt="Linux" class="h-12 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300">
+                        <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/docker-icon.svg" alt="Docker" class="h-12 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ========= Featured Tech End ========= -->
+
+        <!-- ========= Recent Blog Posts Section Start ========= -->
+        <section id="posts" class="bg-gray-100 text-gray-800 py-20 reveal-on-scroll relative">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-extrabold tracking-tight text-gray-900">Recent Blog Posts</h2>
+                    <p class="text-gray-600 mt-3 text-lg">Stay updated with IT and Networking Trends</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="card-3d bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden"><a href="article-1.html"><img src="https://placehold.co/600x400/8B5CF6/FFFFFF?text=WiFi+RADIUS" alt="Blog post image" class="w-full h-48 object-cover"></a><div class="p-6"><span class="text-xs font-semibold uppercase text-purple-500 bg-purple-100 px-2 py-1 rounded-full mb-2 inline-block">Security</span><h3 class="text-xl font-bold mb-2 text-gray-900"><a href="article-1.html" class="hover:underline">Réseau isolé avec WiFi RADIUS - UniFi</a></h3><p class="text-gray-600 text-sm mb-4">Ce projet vise à sécuriser l'accès au réseau WiFi en utilisant un serveur RADIUS...</p><a href="article-1.html" class="font-semibold text-blue-600 hover:text-blue-800 transition-colors">Read More &rarr;</a></div></div>
+                    <div class="card-3d bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden"><a href="article-2.html"><img src="https://placehold.co/600x400/3B82F6/FFFFFF?text=Networking" alt="Blog post image" class="w-full h-48 object-cover"></a><div class="p-6"><span class="text-xs font-semibold uppercase text-blue-500 bg-blue-100 px-2 py-1 rounded-full mb-2 inline-block">Fundamentals</span><h3 class="text-xl font-bold mb-2 text-gray-900"><a href="article-2.html" class="hover:underline">Basics of Networking</a></h3><p class="text-gray-600 text-sm mb-4">Understanding the basics of networking. A guide for beginners in today's digital age...</p><a href="article-2.html" class="font-semibold text-blue-600 hover:text-blue-800 transition-colors">Read More &rarr;</a></div></div>
+                    <div class="card-3d bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden"><a href="article-3.html"><img src="https://placehold.co/600x400/60A5FA/FFFFFF?text=DHCPv6" alt="Blog post image" class="w-full h-48 object-cover"></a><div class="p-6"><span class="text-xs font-semibold uppercase text-sky-500 bg-sky-100 px-2 py-1 rounded-full mb-2 inline-block">IPv6</span><h3 class="text-xl font-bold mb-2 text-gray-900"><a href="article-3.html" class="hover:underline">DHCPv6 - SLAAC</a></h3><p class="text-gray-600 text-sm mb-4">Understanding DHCPv6 and SLAAC. IPv6 Autoconfiguration Explained...</p><a href="article-3.html" class="font-semibold text-blue-600 hover:text-blue-800 transition-colors">Read More &rarr;</a></div></div>
+                    <div class="card-3d bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden"><a href="article-4.html"><img src="https://placehold.co/600x400/ef4444/FFFFFF?text=Firewalls" alt="Blog post image" class="w-full h-48 object-cover"></a><div class="p-6"><span class="text-xs font-semibold uppercase text-red-500 bg-red-100 px-2 py-1 rounded-full mb-2 inline-block">Cybersecurity</span><h3 class="text-xl font-bold mb-2 text-gray-900"><a href="article-4.html" class="hover:underline">Understanding Firewalls</a></h3><p class="text-gray-600 text-sm mb-4">A guide to the gatekeepers of your network and why they are critical for modern security...</p><a href="article-4.html" class="font-semibold text-blue-600 hover:text-blue-800 transition-colors">Read More &rarr;</a></div></div>
+                </div>
+                 <!-- See More Button -->
+                <div class="text-center mt-16">
+                    <a href="blog.html" class="inline-block bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold px-10 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 duration-300">
+                        See More Posts
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- ========= Recent Blog Posts Section End ========= -->
+
+        <!-- ========= LinkedIn Connect Section Start ========= -->
+        <section id="contact" class="bg-white py-20 reveal-on-scroll relative">
+            <div class="container mx-auto px-6 text-center">
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex justify-center mb-6"><div class="flex items-center justify-center h-20 w-20 rounded-full bg-gray-100 border border-gray-200 shadow-lg text-blue-700"><i data-lucide="linkedin" class="w-10 h-10"></i></div></div>
+                    <h2 class="text-4xl font-extrabold tracking-tight text-gray-900">Let's Connect Professionally</h2>
+                    <p class="text-gray-600 mt-4 text-lg max-w-2xl mx-auto">The best way to get in touch for collaborations, career opportunities, or in-depth technical discussions is through LinkedIn. Let's build our professional network.</p>
+                    <div class="mt-8"><a href="https://www.linkedin.com/in/rmloop/" target="_blank" class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold px-10 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 duration-300"><i data-lucide="linkedin" class="w-6 h-6"></i>Visit My LinkedIn Profile</a></div>
+                </div>
+            </div>
+        </section>
+        <!-- ========= LinkedIn Connect Section End ========= -->
+    </main>
+
+    <!-- ========= Footer Start ========= -->
+    <footer class="bg-gray-800 text-gray-300 py-16 reveal-on-scroll">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-3xl font-extrabold text-white tracking-tight">RMLOOP</h3>
+            <p class="mt-4 max-w-md mx-auto">Professional solutions in IT infrastructure, networking, and cybersecurity.</p>
+            <div class="flex justify-center items-center gap-6 mt-8">
+                <a href="https://github.com/isagi-exe" target="_blank" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="github" class="w-6 h-6"></i></a>
+                <a href="https://www.linkedin.com/in/rmloop/" target="_blank" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+            </div>
+            <div class="text-center text-gray-500 mt-12 border-t border-gray-700 pt-8"><p>&copy; 2025 Zakaria Rami. All Rights Reserved.</p></div>
+        </div>
+    </footer>
+    <!-- ========= Footer End ========= -->
+
+    <!-- ========= AI Chat Button Start ========= -->
+    <button id="ai-chat-button" class="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all transform hover:scale-110 duration-300 z-50"><i data-lucide="bot" class="w-8 h-8"></i></button>
+    <!-- ========= AI Chat Button End ========= -->
+
+    <!-- ========= AI Chat Modal Start ========= -->
+    <div id="chat-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div id="chat-modal-backdrop" class="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm"></div>
+        <div id="chat-modal-content" class="bg-white border border-gray-200 rounded-lg shadow-2xl w-11/12 max-w-lg mx-auto relative transform scale-95 opacity-0 flex flex-col" style="height: 70vh;">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200"><div class="flex items-center"><i data-lucide="bot" class="w-6 h-6 text-blue-600 mr-2"></i><h2 class="text-xl font-bold text-gray-900">AI Assistant</h2></div><button id="close-chat-btn" class="text-gray-500 hover:text-gray-800 transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button></div>
+            <div id="chat-messages" class="flex-1 p-4 space-y-4 overflow-y-auto"><div class="flex"><div class="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-xs"><p>Hello! I'm your AI assistant for IT & Networking. How can I help you today?</p></div></div></div>
+            <div class="p-4 border-t border-gray-200"><form id="chat-form" class="flex items-center gap-2"><input id="chat-input" type="text" placeholder="Ask about networking, security..." class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"><button type="submit" id="send-chat-btn" class="bg-blue-600 text-white p-2 rounded-full shadow-md hover:bg-blue-700 transition-colors disabled:bg-gray-400"><i data-lucide="send" class="w-6 h-6"></i></button></form></div>
+        </div>
+    </div>
+    <!-- ========= AI Chat Modal End ========= -->
+
+    <!-- ========= JavaScript Logic Start ========= -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            
+            const mobileMenuButton = document.getElementById('mobile-menu-button'), mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            
+            const revealElements = document.querySelectorAll('.reveal-on-scroll');
+            const revealObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); } }); }, { threshold: 0.1 });
+            revealElements.forEach(el => revealObserver.observe(el));
+            
+            const sections = document.querySelectorAll('section[id], footer[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        navLinks.forEach(link => {
+                            link.classList.remove('nav-active');
+                            if (link.getAttribute('href').substring(1) === id) link.classList.add('nav-active');
+                        });
+                    }
+                });
+            }, { rootMargin: '-50% 0px -50% 0px' });
+            sections.forEach(section => sectionObserver.observe(section));
+            
+            const chatButton = document.getElementById('ai-chat-button'), chatModal = document.getElementById('chat-modal'), chatModalBackdrop = document.getElementById('chat-modal-backdrop'), chatModalContent = document.getElementById('chat-modal-content'), closeChatBtn = document.getElementById('close-chat-btn'), chatForm = document.getElementById('chat-form'), chatInput = document.getElementById('chat-input'), sendChatBtn = document.getElementById('send-chat-btn'), chatMessages = document.getElementById('chat-messages');
+            let chatHistory = [];
+            const openChat = () => { chatModal.classList.remove('hidden'); setTimeout(() => { chatModal.classList.add('opacity-100'); chatModalContent.classList.add('opacity-100', 'scale-100'); chatModalContent.classList.remove('scale-95'); }, 10); };
+            const closeChat = () => { chatModal.classList.remove('opacity-100'); chatModalContent.classList.remove('opacity-100', 'scale-100'); chatModalContent.classList.add('scale-95'); setTimeout(() => { chatModal.classList.add('hidden'); }, 300); };
+            chatButton.addEventListener('click', openChat); closeChatBtn.addEventListener('click', closeChat); chatModalBackdrop.addEventListener('click', closeChat);
+            const appendMessage = (sender, message) => { const wrapper = document.createElement('div'); wrapper.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'}`; const bubble = document.createElement('div'); bubble.className = `p-3 rounded-lg max-w-xs ${sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'}`; bubble.innerHTML = `<p>${message}</p>`; wrapper.appendChild(bubble); chatMessages.appendChild(wrapper); chatMessages.scrollTop = chatMessages.scrollHeight; };
+            chatForm.addEventListener('submit', async (e) => {
+                e.preventDefault(); const userInput = chatInput.value.trim(); if (!userInput) return;
+                appendMessage('user', userInput); chatInput.value = ''; sendChatBtn.disabled = true;
+                const thinkingIndicator = document.createElement('div'); thinkingIndicator.id = 'thinking'; thinkingIndicator.className = 'flex'; thinkingIndicator.innerHTML = `<div class="bg-gray-200 text-gray-500 p-3 rounded-lg max-w-xs flex items-center"><span class="animate-pulse">● ● ●</span></div>`; chatMessages.appendChild(thinkingIndicator); chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                chatHistory.push({ role: "user", content: userInput });
+
+                try {
+                    const apiKey = "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";
+                    const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
+                    
+                    const payload = {
+                        model: "llama3-8b-8192",
+                        messages: [
+                            {role: "system", content: "You are an expert IT and Networking assistant. Your name is RMLOOP AI. Provide helpful and concise answers."},
+                            ...chatHistory
+                        ]
+                    };
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKey}`
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+                    
+                    const result = await response.json();
+                    document.getElementById('thinking')?.remove();
+
+                    if (result.choices && result.choices[0].message.content) {
+                        const aiResponse = result.choices[0].message.content;
+                        appendMessage('ai', aiResponse);
+                        chatHistory.push({ role: "assistant", content: aiResponse });
+                    } else {
+                        appendMessage('ai', 'Sorry, I couldn\'t generate a response. Please try again.');
+                    }
+                } catch (error) {
+                    document.getElementById('thinking')?.remove();
+                    appendMessage('ai', `Sorry, an error occurred: ${error.message}`);
+                    console.error("AI Chat Error:", error);
+                } finally {
+                    sendChatBtn.disabled = false;
+                }
+            });
+
+            // Hero 3D Wave Animation with Three.js
+            let scene, camera, renderer, wave;
+            const canvas = document.getElementById('wave-canvas');
+            
+            function init() {
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / document.getElementById('home').offsetHeight, 0.1, 1000);
+                renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+                renderer.setSize(window.innerWidth, document.getElementById('home').offsetHeight);
+
+                const geometry = new THREE.PlaneGeometry(20, 20, 100, 100);
+                const material = new THREE.MeshBasicMaterial({ color: 0x4f46e5, wireframe: true, transparent: true, opacity: 0.3 });
+                wave = new THREE.Mesh(geometry, material);
+                wave.rotation.x = -Math.PI / 2.5;
+                scene.add(wave);
+
+                camera.position.z = 5;
+                camera.position.y = 2;
+            }
+
+            let frame = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                frame += 0.01;
+                const { array } = wave.geometry.attributes.position;
+                for (let i = 0; i < array.length; i += 3) {
+                    const x = array[i];
+                    const y = array[i + 1];
+                    array[i + 2] = Math.sin(x + frame) * 0.5 + Math.sin(y + frame) * 0.5;
+                }
+                wave.geometry.attributes.position.needsUpdate = true;
+                renderer.render(scene, camera);
+            }
+
+            init();
+            animate();
+            
+            window.addEventListener('resize', () => {
+                const heroSection = document.getElementById('home');
+                camera.aspect = window.innerWidth / heroSection.offsetHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, heroSection.offsetHeight);
+            });
+
+            // Typewriter effect for hero headline
+            const headline = document.getElementById('hero-headline');
+            const text = "Your Partner in IT and Networking";
+            let i = 0;
+            function typeWriter() {
+                if (i < text.length) {
+                    headline.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 70);
+                }
+            }
+            typeWriter();
+
+            // Service card mouse-follow gradient
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.onmousemove = e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                }
+            });
+        });
+    </script>
+    <!-- ========= JavaScript Logic End ========= -->
+</body>
+</html>
